@@ -1,0 +1,8 @@
+{
+    "id": "com.bigislandbulletin.eventbot",
+    "title": "Big Island Bulletin Event Bot",
+    "manifestVersion": 2,
+    "version": "1.0.0",
+    "httpPort": 3000,
+    "healthCheckPath": "/"
+}

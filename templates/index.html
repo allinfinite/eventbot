@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Community Events & Marketplace</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Community Events & Marketplace</h1>
+
+    <h2>Upcoming Events</h2>
+    <iframe src="https://calendar.google.com/calendar/embed?src=YOUR_CALENDAR_ID&ctz=UTC"
+            style="border:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+
+    <h2>Marketplace</h2>
+    <div class="filters">
+        <button onclick="showAll()">All</button>
+        <button onclick="showOnly('offer')">Offers</button>
+        <button onclick="showOnly('request')">Requests</button>
+        <input type="text" id="userSearch" placeholder="Search by username" oninput="filterByUser()">
+    </div>
+
+    <div id="marketplace"></div>
+
+    <script>
+    async function loadMarketplace() {
+        const res = await fetch("/marketplace.json");
+        const data = await res.json();
+
+        let html = "";
+        data.offers.forEach(item => {
+            html += `<div class='item offer'><strong>${item[0]}</strong>: ${item[1]}</div>`;
+        });
+        data.requests.forEach(item => {
+            html += `<div class='item request'><strong>${item[0]}</strong>: ${item[1]}</div>`;
+        });
+
+        document.getElementById("marketplace").innerHTML = html;
+    }
+
+    function showAll() {
+        document.querySelectorAll('.item').forEach(el => el.style.display = 'block');
+    }
+
+    function showOnly(type) {
+        document.querySelectorAll('.item').forEach(el => {
+            el.style.display = el.classList.contains(type) ? 'block' : 'none';
+        });
+    }
+
+    function filterByUser() {
+        const search = document.getElementById("userSearch").value.toLowerCase();
+        document.querySelectorAll('.item').forEach(el => {
+            el.style.display = el.innerHTML.toLowerCase().includes(search) ? 'block' : 'none';
+        });
+    }
+
+    loadMarketplace();
+    </script>
+</body>
+</html>
